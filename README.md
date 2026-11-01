@@ -106,4 +106,4 @@ Dependencies: Python 3 and PyTorch (the Colab default; the version is printed at
 
 ## Author
 
-Mirza Amanda Azzahra, M.Sc. student, Geophysical Engineering, ITS. Contact: mirzaamanda1102@gmail.com
+Mirza Amanda Azzahra, Master's student, Geophysical Engineering, ITS. Contact: mirzaamanda1102@gmail.com
