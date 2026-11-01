@@ -11,7 +11,7 @@ Acoustic impedance (Zp) is normally estimated from post-stack seismic data using
 - Forward model: zero-offset convolutional model on m = ln Zp. Reflectivity is r = 0.5 dm/dt (centred difference), convolved with a zero-phase Ricker wavelet (25 Hz, ±64 ms), so d = G m with G = C D. The physics term is the data misfit ||d_obs − G m̃||² / (2σ_d²) inside the loss (σ_d = 10% of the seismic standard deviation), so **no impedance label enters training**. Synthetic data are generated on a grid at dt/2 and decimated before inversion, so that the data and inversion operators differ (no inverse crime). The low-frequency background m_LF is a straight-line trend of ln Zp versus time, added to the network output.
 - Network: the network outputs a correction Δ ln Zp that is added to the background, m̃ = m_LF + Δm.
   - 1D test (E1): fully connected, one hidden layer of 16 tanh units, input = one normalised trace (80 samples), output = 80 samples (2,656 parameters).
-  - 2D tests (Marmousi2): three-layer 1D convolutional network (8 channels, kernel 11, tanh, tanh, linear; 897 parameters; receptive field 31 samples = 124 ms), shared by all traces. Input = the normalised seismic trace; each window is 120 traces × 250 samples at 4 ms.
+  - 2D tests (Marmousi2 and field line): three-layer 1D convolutional network (8 channels, kernel 11, tanh, tanh, linear; 897 parameters; receptive field 31 samples = 124 ms), shared by all traces. Input = the normalised seismic trace; each window is 120 traces × 250 samples at 4 ms.
 - Uncertainty quantification (compared):
   - Variational inference (main method): mean-field Gaussian over weights, trained by maximising the ELBO (data misfit + closed-form KL to a N(0, 0.1²) prior).
   - Hamiltonian Monte Carlo (1D reference only)
@@ -20,13 +20,13 @@ Acoustic impedance (Zp) is normally estimated from post-stack seismic data using
 
 ## Experiments in this repository
 
-| Notebook | What it does | Data |
-|---|---|---|
-| `E1_BPINN_1D_Colab.ipynb` | 1D synthetic test, single run (seed 0): MAP vs VI vs HMC vs deep ensemble on one blocky impedance trace; reports correlation, MAE, PICP90 and 90% interval width | Synthetic, generated inside the notebook (no download) |
-| `E1_BPINN_1D_5seeds_Colab.ipynb` | Same as E1 repeated over 5 random seeds (0–4) to check stability; prints mean ± std | Synthetic, generated inside the notebook (no download) |
-| `Marmousi2_4windows_Colab.ipynb` | 2D test on four Marmousi2 windows (M1 simple, M2 anticline, M3 faulted, M4 random with seed 2026). Baseline (E2) for all windows; E3 and E4 sensitivity tests on M1 and M3. MAP + VI, seed 0 | Marmousi2 (public); you provide the two SEG-Y files |
-| `Window_B_E2_E3_E4_Colab.ipynb` | One Marmousi2 window (x 1–4.5 km, TWT 0.9–1.9 s, the same region as M1). E2: baseline with correct background and wavelet. E3: background wrong (shifted ±0.10 in ln Zp, about ±10% impedance, and slope × 1.3). E4: wavelet wrong (data use 25 Hz, inversion assumes 20 Hz or 30 Hz) | Marmousi2 (public); you provide the two SEG-Y files |
-| `Field_line_final_4windows_Colab.ipynb` | Application of the same network and inference to windows of a 2D post-stack field line. **Thesis use only; code only, no field data or field results are included here** | Field data are **not** distributed with this repository (see Data note) |
+| Notebook | What it does | Data | Run |
+|---|---|---|---|
+| `E1_BPINN_1D_Colab.ipynb` | 1D synthetic test, single run (seed 0): MAP vs VI vs HMC vs deep ensemble on one blocky impedance trace; reports correlation, MAE, PICP90 and 90% interval width | Synthetic, generated inside the notebook (no download) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kiiyoko123/well-free-acoustic-impedance-with-B-PINN/blob/main/E1_BPINN_1D_Colab.ipynb) |
+| `E1_BPINN_1D_5seeds_Colab.ipynb` | Same as E1 repeated over 5 random seeds (0–4) to check stability; prints mean ± std | Synthetic, generated inside the notebook (no download) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kiiyoko123/well-free-acoustic-impedance-with-B-PINN/blob/main/E1_BPINN_1D_5seeds_Colab.ipynb) |
+| `Marmousi2_4windows_Colab.ipynb` | 2D test on four Marmousi2 windows (M1 simple, M2 anticline, M3 faulted, M4 random with seed 2026). Baseline (E2) for all windows; E3 and E4 sensitivity tests on M1 and M3. MAP + VI, seed 0 | Marmousi2 (public); you provide the two SEG-Y files | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kiiyoko123/well-free-acoustic-impedance-with-B-PINN/blob/main/Marmousi2_4windows_Colab.ipynb) |
+| `Window_B_E2_E3_E4_Colab.ipynb` | One Marmousi2 window (x 1–4.5 km, TWT 0.9–1.9 s, the same region as M1). E2: baseline with correct background and wavelet. E3: background wrong (shifted ±0.10 in ln Zp, about ±10% impedance, and slope × 1.3). E4: wavelet wrong (data use 25 Hz, inversion assumes 20 Hz or 30 Hz) | Marmousi2 (public); you provide the two SEG-Y files | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kiiyoko123/well-free-acoustic-impedance-with-B-PINN/blob/main/Window_B_E2_E3_E4_Colab.ipynb) |
+| `Field_line_final_4windows_Colab.ipynb` | Application of the same network and inference to four windows of one 2D post-stack field line from the South Java Sea. Same VI workflow as the Marmousi2 tests; the true impedance is unknown, so the background trend is estimated from the data | One 2D post-stack field line, used with permission of the data owner; the raw file is **not** distributed with this repository (see Data note) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kiiyoko123/well-free-acoustic-impedance-with-B-PINN/blob/main/Field_line_final_4windows_Colab.ipynb) |
 
 ## Results (preliminary)
 
@@ -63,12 +63,15 @@ What the results show so far:
 - The absolute level follows the assumed background: MAE is not consistently better than the background alone (equal in M3, worse in M4), and a background shifted by ±10% raises the VI MAE in M1 from 0.148 to 0.35–0.41 MRayl without changing the correlation.
 - A wavelet frequency assumed too low (20 Hz) degrades the detail (rho_hp 0.83 → 0.62 in M1); too high (30 Hz) keeps the detail but worsens VI MAE and calibration in the faulted window (MAE 0.875 → 1.031, PICP90 0.75 → 0.67).
 
+**Field line.** The field notebook applies the same workflow to one 2D post-stack line. Because no well is available to check the result, it is a feasibility test: only the plausibility of the layer detail and of the uncertainty sections can be judged, not the absolute error.
+
 ## Reproducing
 
-1. Open a notebook in Google Colab. A CPU runtime is sufficient (the notebooks run in float64 on CPU); no GPU is needed.
+1. Open a notebook in Google Colab (badges in the table above). A CPU runtime is sufficient (the notebooks run in float64 on CPU); no GPU is needed.
 2. Data:
    - E1 notebooks: nothing to download, the synthetic data are generated inside the notebook.
    - Marmousi2 notebooks: download the public Marmousi2 model (Martin et al., 2006) and upload `MODEL_P-WAVE_VELOCITY_1.25m.segy` and `MODEL_DENSITY_1.25m.segy` to the Colab Files panel. The file names in the config cell (`VP_FILE`, `RHO_FILE`) must match exactly. Do not set `QUICK = True` for real results: it switches to a synthetic stand-in model and is only a smoke test.
+   - Field notebook: the field line is not distributed here. To run it, upload a 2D post-stack SEG-Y file of your own and set its name in the config cell.
 3. Run all cells (`Runtime > Run all`). Approximate runtime on Colab CPU:
    - `E1_BPINN_1D_Colab.ipynb`: a few minutes.
    - `E1_BPINN_1D_5seeds_Colab.ipynb`: about 10–25 minutes (5 seeds).
@@ -79,10 +82,10 @@ Dependencies: Python 3 and PyTorch (the Colab default; the version is printed at
 
 ## Limitations
 
-- Validated primarily on synthetic data; field-data validation is ongoing.
+- Validated primarily on synthetic data. The field application covers one 2D line without well control, so it is a feasibility test rather than a validation.
 - Without well control the result is non-unique; the uncertainty estimates reflect the model and prior, not necessarily the true error.
 - The synthetic data are 1D convolutional synthetics (not wave-equation simulations) with zero-phase wavelets; multiples, attenuation and wavelet phase errors are not modelled.
-- In the synthetic tests the background is a straight line fitted to the true model, an idealisation that is not available in practice. The uncertainty of the background is not included in the intervals, so a wrong background shifts the result without widening the interval.
+- In the synthetic tests the background is a straight line fitted to the true model, an idealisation that is not available in practice. On the field line the background is estimated from the data and its error cannot be measured. The uncertainty of the background is not included in the intervals, so a wrong background shifts the result without widening the interval.
 - Absolute impedance follows the assumed background; only layer detail is informed by the data.
 - VI under-estimates the posterior spread (PICP90 0.70 in the 1D test, 0.75 in the faulted Marmousi2 window); HMC is feasible only in 1D.
 - The Marmousi2 results use one seed (seed 0) and four windows; the 1D test uses 5 seeds.
@@ -91,7 +94,15 @@ Dependencies: Python 3 and PyTorch (the Colab default; the version is printed at
 
 - Synthetic data are generated by the notebooks and are not stored in this repository.
 - Marmousi2 is a public synthetic model (Martin et al., 2006). It is not redistributed here; download it from its original source and follow its terms of use.
-- No field or proprietary seismic data are included in this repository, and no field results are published here. The field-line notebook is provided as code only.
+- The field example uses one 2D post-stack seismic line from the South Java Sea, used with permission of the data owner. The raw seismic file is not redistributed in this repository, and `.sgy`/`.segy` files are excluded through `.gitignore`.
+
+## References
+
+- Martin, G. S., Wiley, R., and Marfurt, K. J., 2006, Marmousi2: An elastic upgrade for Marmousi: The Leading Edge, 25(2), 156–166.
+- Raissi, M., Perdikaris, P., and Karniadakis, G. E., 2019, Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations: Journal of Computational Physics, 378, 686–707.
+- Blundell, C., Cornebise, J., Kavukcuoglu, K., and Wierstra, D., 2015, Weight uncertainty in neural networks: Proceedings of the 32nd International Conference on Machine Learning (ICML).
+- Neal, R. M., 2011, MCMC using Hamiltonian dynamics: in Handbook of Markov Chain Monte Carlo, Chapman and Hall/CRC.
+- Lakshminarayanan, B., Pritzel, A., and Blundell, C., 2017, Simple and scalable predictive uncertainty estimation using deep ensembles: Advances in Neural Information Processing Systems (NeurIPS) 30.
 
 ## Author
 
