@@ -58,7 +58,7 @@ WINDOWS = {                  # name: (x0 m, x1 m, TWT start s); every window is 
     "M3_complex": (5000, 12000, 1.3),
     "M4_random":  (M4_X0, M4_X0 + 6000, M4_T0),
 }
-VARIANT_WINDOWS = ["M1_simple", "M3_complex"]    # windows that also get E3 and E4 ([] = baselines only)
+VARIANT_WINDOWS = []    # windows that also get E3 and E4 ([] = baselines only)
 
 def base_args(win):
     x0, x1, t0 = WINDOWS[win]
