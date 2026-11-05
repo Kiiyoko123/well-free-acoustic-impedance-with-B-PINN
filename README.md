@@ -70,6 +70,32 @@ VI intervals are about 2.6 times narrower than the HMC reference and cover the t
 ![Marmousi2, four windows](figures/marmousi2_four_windows.png)
 *Rows: M1–M4. Columns: true Zp, background, VI posterior mean, VI posterior standard deviation.*
 
+
+<details>
+<summary>E2 sections and trace calibration per window</summary>
+
+**M1 simple**
+
+![M1 sections](figures/m4_M1_simple_baseline_e2_sections.png)
+![M1 trace calibration](figures/m4_M1_simple_baseline_e2_trace_calibration.png)
+
+**M2 anticline**
+
+![M2 sections](figures/m4_M2_chosen_baseline_e2_sections.png)
+![M2 trace calibration](figures/m4_M2_chosen_baseline_e2_trace_calibration.png)
+
+**M3 faulted**
+
+![M3 sections](figures/m4_M3_complex_baseline_e2_sections.png)
+![M3 trace calibration](figures/m4_M3_complex_baseline_e2_trace_calibration.png)
+
+**M4 random**
+
+![M4 sections](figures/m4_M4_random_baseline_e2_sections.png)
+![M4 trace calibration](figures/m4_M4_random_baseline_e2_trace_calibration.png)
+
+</details>
+
 What the results show so far:
 - Layer detail is recovered in all four windows (rho_hp 0.69–0.78).
 - The absolute level follows the assumed background: MAE is not consistently better than the background alone (equal in M3, worse in M4), and a background shifted by ±10% raises the VI MAE in M1 from 0.148 to 0.35–0.41 MRayl without changing the correlation.
