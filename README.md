@@ -8,6 +8,9 @@ Acoustic impedance (Zp) is normally estimated from post-stack seismic data using
 
 ## Approach
 
+![B-PINN workflow](figures/bpinn_workflow.png)
+*Training scheme: the network output is passed through the forward model and compared with the observed trace; no impedance label is used.*
+
 - Forward model: zero-offset convolutional model on m = ln Zp. Reflectivity is r = 0.5 dm/dt (centred difference), convolved with a zero-phase Ricker wavelet (25 Hz, ±64 ms), so d = G m with G = C D. The physics term is the data misfit ||d_obs − G m̃||² / (2σ_d²) inside the loss (σ_d = 10% of the seismic standard deviation), so **no impedance label enters training**. Synthetic data are generated on a grid at dt/2 and decimated before inversion, so that the data and inversion operators differ (no inverse crime). The low-frequency background m_LF is a straight-line trend of ln Zp versus time, added to the network output.
 - Network: the network outputs a correction Δ ln Zp that is added to the background, m̃ = m_LF + Δm.
   - 1D test (E1): fully connected, one hidden layer of 16 tanh units, input = one normalised trace (80 samples), output = 80 samples (2,656 parameters).
@@ -34,6 +37,9 @@ All 2D scripts import the shared code from `bpinn_core.py` (forward model, 1D CN
 
 All numbers below are produced by the scripts in this repository.
 
+![E1 input and answer key](figures/e1_input_seed0.png)
+*E1, seed 0: the observed seismic trace (left) and the true impedance with the given background (right).*
+
 **1D reference test (E1, 5 seeds, mean ± std).** VI is compared with HMC (reference posterior) and a deep ensemble. MAE and width are in MRayl.
 
 | Method | Correlation | MAE | PICP90 (ideal 0.90) | 90% interval width |
@@ -47,6 +53,10 @@ VI intervals are about 2.6 times narrower than the HMC reference and cover the t
 
 ![E1 posteriors, seed 0](figures/e1_posteriors_seed0.png)
 *E1, seed 0: true impedance (black), estimate and 90% interval for MAP, VI, HMC and the deep ensemble.*
+
+
+![E1 calibration, seed 0](figures/e1_calibration_seed0.png)
+*E1, seed 0: empirical coverage against nominal probability. VI lies below the ideal line.*
 
 **2D test on Marmousi2 (VI, seed 0, correct background and wavelet).** BG MAE is the error of the background trend alone. `rho_hp` is the correlation of the high-frequency part (layer detail). MAE and width are in MRayl.
 
