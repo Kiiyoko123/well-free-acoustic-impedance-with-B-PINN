@@ -58,7 +58,7 @@ WINDOWS = {                  # name: (x0 m, x1 m, TWT start s); every window is 
     "M3_complex": (5000, 12000, 1.3),
     "M4_random":  (M4_X0, M4_X0 + 6000, M4_T0),
 }
-VARIANT_WINDOWS = []    # windows that also get E3 and E4 ([] = baselines only)
+VARIANT_WINDOWS = ["M1_simple", "M3_complex"]    # windows that also get E3 and E4 ([] = baselines only)
 
 def base_args(win):
     x0, x1, t0 = WINDOWS[win]
@@ -87,8 +87,8 @@ EXPS = {
     "E4a_wavelet_20Hz": ["--fm_inv", "20"],
     "E4b_wavelet_30Hz": ["--fm_inv", "30"],
 }
-jobs = [(w, "baseline") for w in WINDOWS] + [(w, e) for w in VARIANT_WINDOWS for e in EXPS]
-summary = {}
+jobs = [(w, e) for w in VARIANT_WINDOWS for e in EXPS]   # baselines already done: skipped
+summary = json.load(open("m4_summary.json"))              # keep the baseline results
 
 def show(summary):
     print(f"{'window / run':32s} | {'BG corr':>7s} {'BG MAE':>6s} | {'MAP corr':>8s} {'MAE':>6s} {'hp':>5s} | {'VI corr':>7s} {'MAE':>6s} {'hp':>5s} {'PICP90':>6s} {'width':>6s}")
