@@ -99,7 +99,7 @@ VI intervals are about 2.6 times narrower than the HMC reference and cover the t
 What the results show so far:
 - Layer detail is recovered in all four windows (rho_hp 0.69–0.78).
 - The absolute level follows the assumed background: MAE is not consistently better than the background alone (equal in M3, worse in M4), and a background shifted by ±10% raises the VI MAE in M1 from 0.148 to 0.35–0.41 MRayl without changing the correlation.
-- A wavelet frequency assumed too low (20 Hz) degrades the detail (rho_hp 0.83 → 0.62 in M1); too high (30 Hz) keeps the detail but worsens VI MAE and calibration in the faulted window (MAE 0.875 → 1.031, PICP90 0.75 → 0.67).
+- A wavelet frequency assumed too low (20 Hz) degrades the detail (VI rho_hp 0.78 → 0.58 in M1); too high (30 Hz) keeps the detail but worsens VI MAE and calibration in the faulted window (MAE 0.875 → 1.031, PICP90 0.75 → 0.67).
 
 **Field line.** The field script applies the same workflow to one 2D post-stack line. Because no well is available to check the result, it is a feasibility test: only the plausibility of the layer detail and of the uncertainty sections can be judged, not the absolute error.
 
