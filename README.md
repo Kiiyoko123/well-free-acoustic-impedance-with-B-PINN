@@ -96,6 +96,62 @@ VI intervals are about 2.6 times narrower than the HMC reference and cover the t
 
 </details>
 
+
+<details>
+<summary>E3 and E4 sensitivity runs (M1 and M3): sections and trace calibration</summary>
+
+**M1, background +10% (E3a)**
+
+![M1 E3a sections](figures/m4_M1_simple_E3a_shift_p10_e2_sections.png)
+![M1 E3a calibration](figures/m4_M1_simple_E3a_shift_p10_e2_trace_calibration.png)
+
+**M1, background −10% (E3b)**
+
+![M1 E3b sections](figures/m4_M1_simple_E3b_shift_m10_e2_sections.png)
+![M1 E3b calibration](figures/m4_M1_simple_E3b_shift_m10_e2_trace_calibration.png)
+
+**M1, background slope ×1.3 (E3c)**
+
+![M1 E3c sections](figures/m4_M1_simple_E3c_slope_x1.3_e2_sections.png)
+![M1 E3c calibration](figures/m4_M1_simple_E3c_slope_x1.3_e2_trace_calibration.png)
+
+**M1, wavelet 20 Hz (E4a)**
+
+![M1 E4a sections](figures/m4_M1_simple_E4a_wavelet_20Hz_e2_sections.png)
+![M1 E4a calibration](figures/m4_M1_simple_E4a_wavelet_20Hz_e2_trace_calibration.png)
+
+**M1, wavelet 30 Hz (E4b)**
+
+![M1 E4b sections](figures/m4_M1_simple_E4b_wavelet_30Hz_e2_sections.png)
+![M1 E4b calibration](figures/m4_M1_simple_E4b_wavelet_30Hz_e2_trace_calibration.png)
+
+**M3, background +10% (E3a)**
+
+![M3 E3a sections](figures/m4_M3_complex_E3a_shift_p10_e2_sections.png)
+![M3 E3a calibration](figures/m4_M3_complex_E3a_shift_p10_e2_trace_calibration.png)
+
+**M3, background −10% (E3b)**
+
+![M3 E3b sections](figures/m4_M3_complex_E3b_shift_m10_e2_sections.png)
+![M3 E3b calibration](figures/m4_M3_complex_E3b_shift_m10_e2_trace_calibration.png)
+
+**M3, background slope ×1.3 (E3c)**
+
+![M3 E3c sections](figures/m4_M3_complex_E3c_slope_x1.3_e2_sections.png)
+![M3 E3c calibration](figures/m4_M3_complex_E3c_slope_x1.3_e2_trace_calibration.png)
+
+**M3, wavelet 20 Hz (E4a)**
+
+![M3 E4a sections](figures/m4_M3_complex_E4a_wavelet_20Hz_e2_sections.png)
+![M3 E4a calibration](figures/m4_M3_complex_E4a_wavelet_20Hz_e2_trace_calibration.png)
+
+**M3, wavelet 30 Hz (E4b)**
+
+![M3 E4b sections](figures/m4_M3_complex_E4b_wavelet_30Hz_e2_sections.png)
+![M3 E4b calibration](figures/m4_M3_complex_E4b_wavelet_30Hz_e2_trace_calibration.png)
+
+</details>
+
 What the results show so far:
 - Layer detail is recovered in all four windows (rho_hp 0.69–0.78).
 - The absolute level follows the assumed background: MAE is not consistently better than the background alone (equal in M3, worse in M4), and a background shifted by ±10% raises the VI MAE in M1 from 0.148 to 0.35–0.41 MRayl without changing the correlation.
