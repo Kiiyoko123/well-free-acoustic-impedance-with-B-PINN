@@ -20,17 +20,19 @@ Acoustic impedance (Zp) is normally estimated from post-stack seismic data using
 
 ## Experiments in this repository
 
-| Notebook | What it does | Data | Run |
-|---|---|---|---|
-| `E1_BPINN_1D_Colab.ipynb` | 1D synthetic test, single run (seed 0): MAP vs VI vs HMC vs deep ensemble on one blocky impedance trace; reports correlation, MAE, PICP90 and 90% interval width | Synthetic, generated inside the notebook (no download) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kiiyoko123/well-free-acoustic-impedance-with-B-PINN/blob/main/E1_BPINN_1D_Colab.ipynb) |
-| `E1_BPINN_1D_5seeds_Colab.ipynb` | Same as E1 repeated over 5 random seeds (0–4) to check stability; prints mean ± std | Synthetic, generated inside the notebook (no download) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kiiyoko123/well-free-acoustic-impedance-with-B-PINN/blob/main/E1_BPINN_1D_5seeds_Colab.ipynb) |
-| `Marmousi2_4windows_Colab.ipynb` | 2D test on four Marmousi2 windows (M1 simple, M2 anticline, M3 faulted, M4 random with seed 2026). Baseline (E2) for all windows; E3 and E4 sensitivity tests on M1 and M3. MAP + VI, seed 0 | Marmousi2 (public); you provide the two SEG-Y files | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kiiyoko123/well-free-acoustic-impedance-with-B-PINN/blob/main/Marmousi2_4windows_Colab.ipynb) |
-| `Window_B_E2_E3_E4_Colab.ipynb` | One Marmousi2 window (x 1–4.5 km, TWT 0.9–1.9 s, the same region as M1). E2: baseline with correct background and wavelet. E3: background wrong (shifted ±0.10 in ln Zp, about ±10% impedance, and slope × 1.3). E4: wavelet wrong (data use 25 Hz, inversion assumes 20 Hz or 30 Hz) | Marmousi2 (public); you provide the two SEG-Y files | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kiiyoko123/well-free-acoustic-impedance-with-B-PINN/blob/main/Window_B_E2_E3_E4_Colab.ipynb) |
-| `Field_line_final_4windows_Colab.ipynb` | Application of the same network and inference to four windows of one 2D post-stack field line from the South Java Sea. Same VI workflow as the Marmousi2 tests; the true impedance is unknown, so the background trend is estimated from the data | One 2D post-stack field line, used with permission of the data owner; the raw file is **not** distributed with this repository (see Data note) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kiiyoko123/well-free-acoustic-impedance-with-B-PINN/blob/main/Field_line_final_4windows_Colab.ipynb) |
+| Script | What it does | Data |
+|---|---|---|
+| `e1_bpinn_1d.py` | 1D synthetic test, single run (seed 0): MAP vs VI vs HMC vs deep ensemble on one blocky impedance trace; reports correlation, MAE, PICP90 and 90% interval width | Synthetic, generated inside the script (no download) |
+| `e1_bpinn_1d_5seeds.py` | Same as E1 repeated over 5 random seeds (0–4) to check stability; prints mean ± std | Synthetic, generated inside the script (no download) |
+| `marmousi2_four_windows.py` | 2D test on four Marmousi2 windows (M1 simple, M2 anticline, M3 faulted, M4 random with seed 2026). Baseline (E2) for all windows; E3 and E4 sensitivity tests on M1 and M3. MAP + VI, seed 0 | Marmousi2 (public); you provide the two SEG-Y files |
+| `window_b_e2_e3_e4.py` | One Marmousi2 window (x 1–4.5 km, TWT 0.9–1.9 s, the same region as M1). E2: baseline with correct background and wavelet. E3: background wrong (shifted ±0.10 in ln Zp, about ±10% impedance, and slope × 1.3). E4: wavelet wrong (data use 25 Hz, inversion assumes 20 Hz or 30 Hz) | Marmousi2 (public); you provide the two SEG-Y files |
+| `field_line_four_windows.py` | Application of the same network and inference to four windows of one 2D post-stack field line from the South Java Sea. Same VI workflow as the Marmousi2 tests; the true impedance is unknown, so the background trend is estimated from the data | One 2D post-stack field line, used with permission of the data owner; the raw file is **not** distributed with this repository (see Data note) |
+
+All 2D scripts import the shared code from `bpinn_core.py` (forward model, 1D CNN, MAP, VI, metrics). The two E1 scripts are self-contained. Each script is written as VS Code "cells" (`# %%`), so it can be run cell by cell in the Interactive Window or as a normal Python script.
 
 ## Results (preliminary)
 
-All numbers below are produced by the notebooks in this repository.
+All numbers below are produced by the scripts in this repository.
 
 **1D reference test (E1, 5 seeds, mean ± std).** VI is compared with HMC (reference posterior) and a deep ensemble. MAE and width are in MRayl.
 
@@ -63,22 +65,30 @@ What the results show so far:
 - The absolute level follows the assumed background: MAE is not consistently better than the background alone (equal in M3, worse in M4), and a background shifted by ±10% raises the VI MAE in M1 from 0.148 to 0.35–0.41 MRayl without changing the correlation.
 - A wavelet frequency assumed too low (20 Hz) degrades the detail (rho_hp 0.83 → 0.62 in M1); too high (30 Hz) keeps the detail but worsens VI MAE and calibration in the faulted window (MAE 0.875 → 1.031, PICP90 0.75 → 0.67).
 
-**Field line.** The field notebook applies the same workflow to one 2D post-stack line. Because no well is available to check the result, it is a feasibility test: only the plausibility of the layer detail and of the uncertainty sections can be judged, not the absolute error.
+**Field line.** The field script applies the same workflow to one 2D post-stack line. Because no well is available to check the result, it is a feasibility test: only the plausibility of the layer detail and of the uncertainty sections can be judged, not the absolute error.
 
 ## Reproducing
 
-1. Open a notebook in Google Colab (badges in the table above). A CPU runtime is sufficient (the notebooks run in float64 on CPU); no GPU is needed.
-2. Data:
-   - E1 notebooks: nothing to download, the synthetic data are generated inside the notebook.
-   - Marmousi2 notebooks: download the public Marmousi2 model (Martin et al., 2006) and upload `MODEL_P-WAVE_VELOCITY_1.25m.segy` and `MODEL_DENSITY_1.25m.segy` to the Colab Files panel. The file names in the config cell (`VP_FILE`, `RHO_FILE`) must match exactly. Do not set `QUICK = True` for real results: it switches to a synthetic stand-in model and is only a smoke test.
-   - Field notebook: the field line is not distributed here. To run it, upload a 2D post-stack SEG-Y file of your own and set its name in the config cell.
-3. Run all cells (`Runtime > Run all`). Approximate runtime on Colab CPU:
-   - `E1_BPINN_1D_Colab.ipynb`: a few minutes.
-   - `E1_BPINN_1D_5seeds_Colab.ipynb`: about 10–25 minutes (5 seeds).
-   - `Window_B_E2_E3_E4_Colab.ipynb`: about 1–1.5 hours.
-   - `Marmousi2_4windows_Colab.ipynb`: about 3 hours for all 14 runs (about 50 minutes with `VARIANT_WINDOWS = []`).
+1. Create an environment and install the dependencies (Python 3.10+; a CPU is sufficient, everything runs in float64 on CPU and no GPU is needed):
 
-Dependencies: Python 3 and PyTorch (the Colab default; the version is printed at the top of each notebook), NumPy, SciPy, Matplotlib, and `segyio` (installed by the first cell of the Marmousi2 notebooks). Random seeds are set in each notebook.
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate          # Windows: .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+2. Open the folder in VS Code with the Python and Jupyter extensions, select the `.venv` interpreter, and either click **Run Cell** above each `# %%` block (results appear in the Interactive Window), or run a whole script from the terminal, for example `python e1_bpinn_1d_5seeds.py`. Use `MPLBACKEND=Agg` to run without opening figure windows.
+3. Data:
+   - E1 scripts: nothing to download, the synthetic data are generated inside the script.
+   - Marmousi2 scripts: download the public Marmousi2 model (Martin et al., 2006) and put `MODEL_P-WAVE_VELOCITY_1.25m.segy` and `MODEL_DENSITY_1.25m.segy` in the `data/` folder (git-ignored). The names in the config cell (`VP_FILE`, `RHO_FILE`) must match. Do not set `QUICK = True` for real results: it switches to a synthetic stand-in model and is only a smoke test.
+   - Field script: the field line is not distributed here. To run it, put a 2D post-stack SEG-Y file of your own in `data/` (or set the `FIELD_SGY` environment variable to its path).
+4. Outputs (figures, `.json`, `.npz`) are written to `outputs/<script name>/` (git-ignored). Approximate runtime on a CPU:
+   - `e1_bpinn_1d.py`: a few minutes.
+   - `e1_bpinn_1d_5seeds.py`: about 10–25 minutes (5 seeds).
+   - `window_b_e2_e3_e4.py`: about 1–1.5 hours.
+   - `marmousi2_four_windows.py`: about 3 hours for all 14 runs (about 50 minutes with `VARIANT_WINDOWS = []`).
+
+Dependencies: see `requirements.txt` (PyTorch, NumPy, SciPy, Matplotlib, `segyio`). Random seeds are set in each script.
 
 ## Limitations
 
@@ -92,7 +102,7 @@ Dependencies: Python 3 and PyTorch (the Colab default; the version is printed at
 
 ## Data note
 
-- Synthetic data are generated by the notebooks and are not stored in this repository.
+- Synthetic data are generated by the scripts and are not stored in this repository.
 - Marmousi2 is a public synthetic model (Martin et al., 2006). It is not redistributed here; download it from its original source and follow its terms of use.
 - The field example uses one 2D post-stack seismic line from the South Java Sea, used with permission of the data owner. The raw seismic file is not redistributed in this repository, and `.sgy`/`.segy` files are excluded through `.gitignore`.
 

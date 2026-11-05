@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- project: data and outputs (never commit raw seismic or run results)
+data/
+outputs/
+*.sgy
+*.segy
+*.npz
