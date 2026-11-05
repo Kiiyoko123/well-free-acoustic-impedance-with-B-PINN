@@ -402,7 +402,7 @@ ax[0].plot(t_ms, R["d"], "k"); ax[0].set_title(f"Input: observed seismic trace (
 ax[1].step(t_ms, z_true, "k", where="mid", label="true Zp (hidden from the network)")
 ax[1].plot(t_ms, np.exp(m_lf), "g:", label="background (given)")
 ax[1].set_title("Answer key and low-frequency background"); ax[1].set_xlabel("TWT (ms)"); ax[1].set_ylabel("Zp (MRayl)")
-ax[1].legend(fontsize=8); plt.tight_layout(); plt.show()
+ax[1].legend(fontsize=8); plt.tight_layout(); plt.savefig("e1_input_seed0.png", dpi=150, bbox_inches="tight"); plt.show()
 
 fig, ax = plt.subplots(1, 4, figsize=(20, 4), sharey=True)
 ax[0].step(t_ms, z_true, "k", where="mid", label="true"); ax[0].plot(t_ms, R["z_map"], "r", label="MAP")
@@ -413,13 +413,13 @@ for a_, k in zip(ax[1:], ["VI", "HMC", "Ensemble"]):
     a_.plot(t_ms, mn, "b", label="mean"); a_.step(t_ms, z_true, "k", where="mid", label="true")
     a_.set_title(f"{k}: corr={res[k]['corr']:.2f}, PICP90={res[k]['picp90']:.2f}")
 for a_ in ax: a_.set_xlabel("TWT (ms)"); a_.legend(fontsize=8)
-ax[0].set_ylabel("Zp (MRayl)"); plt.tight_layout(); plt.show()
+ax[0].set_ylabel("Zp (MRayl)"); plt.tight_layout(); plt.savefig("e1_posteriors_seed0.png", dpi=150, bbox_inches="tight"); plt.show()
 
 plt.figure(figsize=(4.5, 4.5)); plt.plot([0, 1], [0, 1], "k--", label="ideal")
 for k, c in zip(["VI", "HMC", "Ensemble"], ["tab:blue", "tab:orange", "tab:green"]):
     cov = res[k]["coverage"]; plt.plot(list(cov.keys()), list(cov.values()), "o-", color=c, label=k)
 plt.xlabel("nominal coverage"); plt.ylabel("empirical coverage (PICP)")
-plt.title(f"Calibration (seed {s0})"); plt.legend(); plt.tight_layout(); plt.show()
+plt.title(f"Calibration (seed {s0})"); plt.legend(); plt.tight_layout(); plt.savefig("e1_calibration_seed0.png", dpi=150, bbox_inches="tight"); plt.show()
 
 # %%
 # Save results (written to outputs/e1_bpinn_1d_5seeds/)

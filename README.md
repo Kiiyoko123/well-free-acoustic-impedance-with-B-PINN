@@ -40,7 +40,7 @@ All numbers below are produced by the scripts in this repository.
 |---|---|---|---|---|
 | MAP | 0.92 ± 0.04 | 0.69 ± 0.23 | – | – |
 | VI | 0.86 ± 0.04 | 0.91 ± 0.23 | 0.70 ± 0.17 | 2.31 ± 0.31 |
-| HMC | 0.90 ± 0.03 | 0.80 ± 0.20 | 1.00 ± 0.00 | 5.97 ± 0.16 |
+| HMC | 0.90 ± 0.04 | 0.79 ± 0.22 | 1.00 ± 0.00 | 5.93 ± 0.19 |
 | Deep ensemble | 0.96 ± 0.01 | 0.48 ± 0.08 | 0.99 ± 0.01 | 5.04 ± 0.23 |
 
 VI intervals are about 2.6 times narrower than the HMC reference and cover the true impedance only 70% of the time at the nominal 90% level (0.51 to 0.96 across seeds), so VI is overconfident in this test.
