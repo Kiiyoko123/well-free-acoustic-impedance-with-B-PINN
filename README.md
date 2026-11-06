@@ -157,7 +157,25 @@ What the results show so far:
 - The absolute level follows the assumed background: MAE is not consistently better than the background alone (equal in M3, worse in M4), and a background shifted by ±10% raises the VI MAE in M1 from 0.148 to 0.35–0.41 MRayl without changing the correlation.
 - A wavelet frequency assumed too low (20 Hz) degrades the detail (VI rho_hp 0.78 → 0.58 in M1); too high (30 Hz) keeps the detail but worsens VI MAE and calibration in the faulted window (MAE 0.875 → 1.031, PICP90 0.75 → 0.67).
 
-**Field line.** The field script applies the same workflow to one 2D post-stack line. Because no well is available to check the result, it is a feasibility test: only the plausibility of the layer detail and of the uncertainty sections can be judged, not the absolute error.
+### Field line (thesis data, no well control)
+
+The same B-PINN is applied to four 120-trace windows of the 2D post-stack line M10SJI_6001 (W1: km 40-52, W2: km 108-120, W3: km 55-65 with a dipping seabed, W4: a randomly drawn window, seed 2026). Each window starts 0.15 s below its own seabed pick. The background is a compaction trend (V0 = 1.7 km/s, k = 0.6 1/s), the amplitude scale is assumed (std of the data = 0.04), and the wavelet is a zero-phase Ricker at 35 Hz. The wavelet frequency was checked per window with a residual scan (minimum at about 31-33 Hz, nearly flat from 28 to 37 Hz), and not taken from the spectral peak of the data, which is biased by the colour of the reflectivity.
+
+There is no well, so these results test plausibility, not accuracy:
+
+- **Data fit:** correlation 0.985-0.991 in all windows, but residual std / sigma_d is 1.3-1.75, so the model does not fully explain the data (noise above the assumed 10%, or unmodelled energy such as multiples).
+- **Uncertainty:** the posterior std is 0.55-0.61 of the prior-predictive std, so the data narrow the prior by only about 40%. The 90% interval width is 2.2-2.5 MRayl with the background fixed and 2.4-2.9 MRayl when the background uncertainty (V0 in 1.5-1.9, k in 0.4-0.8) is included.
+- **Plausibility:** 26-47% of posterior samples fall inside the analogue formation windows (laboratory relations, may sit above shallow in-situ values).
+- **Wavelet sensitivity (30 / 40 Hz vs 35 Hz):** the detail of the posterior mean correlates 0.89-0.90 with the base run at 30 Hz and 0.97-0.98 at 40 Hz; the mean ln Zp shifts by at most 0.05.
+
+| Window | Base | Wavelet -5 Hz | Wavelet +5 Hz |
+|---|---|---|---|
+| W1 | [figure](figures/field_W1_base.png) | [figure](figures/field_W1_fm_lo.png) | [figure](figures/field_W1_fm_hi.png) |
+| W2 | [figure](figures/field_W2_base.png) | [figure](figures/field_W2_fm_lo.png) | [figure](figures/field_W2_fm_hi.png) |
+| W3 | [figure](figures/field_W3_base.png) | - | - |
+| W4 | [figure](figures/field_W4_base.png) | - | - |
+
+Window positions: [preview](figures/field_field_windows_preview.png). The wavelet scan can be rerun with `FIELD_SCAN=1` (about 25 min). The raw SEG-Y is not in the repository.
 
 ## Reproducing
 
