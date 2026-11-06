@@ -242,12 +242,29 @@ ax.imshow(sec[:1500], aspect="auto", cmap="gray_r", vmin=-v, vmax=v, extent=[0, 
 for nm, w in WINDOWS.items():
     ax.add_patch(plt.Rectangle((w["x0"], w["t0"]), w["x1"] - w["x0"], 1.0, fill=False, ec="red", lw=2))
     ax.text(w["x0"], w["t0"] - 0.05, nm, color="red", fontsize=13)
-ax.set_xlabel("distance along line (km)"); ax.set_ylabel("TWT (s)"); plt.show()
+ax.set_xlabel("distance along line (km)"); ax.set_ylabel("TWT (s)"); fig.savefig("field_windows_preview.png", dpi=130, bbox_inches="tight"); plt.show()
 for nm, w in WINDOWS.items():
     d_, tsb_, tau_, _ = load_window(FIELD_FILE, dist, w["x0"], w["x1"], w["t0"])
     print(f"{nm}: seabed {tsb_.min():.2f}-{tsb_.max():.2f} s, window starts {tau_[:, 0].min():.2f}-{tau_[:, 0].max():.2f} s below the seabed, "
           f"spectral peak {spectrum_peak(d_):.0f} Hz")
     assert tau_[:, 0].min() > 0.05, f"{nm}: the window starts above or at the seabed, move t0 down"
+
+# %% [markdown]
+# ## Wavelet scan for W3 and W4 (residual criterion, short runs)
+
+# %%
+import os
+RUN_SCAN = os.environ.get("FIELD_SCAN") == "1"   # set FIELD_SCAN=1 to run the wavelet scan (about 25 min)
+scan = {}
+for wn in (["W3", "W4"] if RUN_SCAN else []):
+    w = WINDOWS[wn]
+    d_raw, tsb, tau, xk = load_window(FIELD_FILE, dist, w["x0"], w["x1"], w["t0"])
+    scan[wn] = {}
+    for fm in [25, 28, 31, 34, 37, 40, 45, 50]:
+        r, _ = run_field(d_raw, tau, f"scan_{wn}_{fm}", "field_out_scan", V0=V0, k=K, fm=float(fm), amp=AMP,
+                         map_steps=300, vi_steps=400, vi_mc=2, n_post=20, show=False)
+        scan[wn][fm] = r["resid_std_over_sigma_d"]
+    print(wn, {k: round(v, 2) for k, v in scan[wn].items()})
 
 # %% [markdown]
 # ## Run
