@@ -225,3 +225,7 @@ outputs/
 *.sgy
 *.segy
 *.npz
+
+f3_*.npz
+f3_result_sd10.*
+f3_result_sp01.*
